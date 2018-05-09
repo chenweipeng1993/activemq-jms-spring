@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <!--&lt;!&ndash;在ProducerServiceImpl中使用了注解所以需要配置注解&ndash;&gt;-->
+    <!--<context:annotation-config/>-->
+
+    <!--&lt;!&ndash;ActiveMQ为我们提供的ConnectionFactory&ndash;&gt;-->
+    <!--<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">-->
+        <!--&lt;!&ndash; 配置 brokerURL，这里为你自己开启 ActiveMQ 服务的地址&ndash;&gt;-->
+        <!--<property name="brokerURL" value="tcp://127.0.0.1:61616"/>-->
+    <!--</bean>-->
+    <!--&lt;!&ndash;spring jms为我们提供的连接池&ndash;&gt;-->
+    <!--<bean id="connectionFactory" class="org.springframework.jms.connection.SingleConnectionFactory">-->
+        <!--<property name="targetConnectionFactory" ref="targetConnectionFactory"/>-->
+    <!--</bean>-->
+
+    <!--&lt;!&ndash;目标对象&ndash;&gt;-->
+    <!--&lt;!&ndash;一个队列的目的地，点对点的 value是队列名称&ndash;&gt;-->
+    <!--&lt;!&ndash;-->
+        <!--点对点或队列模型-->
+        <!--配置队列的目的地-->
+    <!--&ndash;&gt;-->
+    <!--<bean id="queueDestination" class="org.apache.activemq.command.ActiveMQQueue">-->
+        <!--<constructor-arg name="name" value="jms-spring-queue"/>-->
+    <!--</bean>-->
+    <!--导入公共配置-->
+    <import resource="spring-jms-common.xml"/>
+    <!--配置jmsTemplate用于发送消息-->
+    <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+        <!--使用的是spring jms为我们提供的连接池-->
+        <property name="connectionFactory" ref="connectionFactory"/>
+    </bean>
+    <!-- 把 ProducerServiceImpl 交给Spring IoC 容器管理-->
+    <bean class="com.peng.jms.producer.ProducerServiceImpl"/>
+</beans>
